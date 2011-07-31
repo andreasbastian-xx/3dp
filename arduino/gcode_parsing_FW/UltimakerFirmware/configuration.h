@@ -26,6 +26,10 @@
 
 #define MOTHERBOARD 3 
 
+// The number of real extruders in this machine
+
+#define EXTRUDER_COUNT 1
+
 /*********************************************************************************************
 *  _   _ _ _   _                 _
 * | | | | | |_(_)_ __ ___   __ _| | _____ _ __
@@ -38,6 +42,13 @@
 *********************************************************************************************/
 
 #if MOTHERBOARD == 3
+
+// Comment out this if you are using a thermocouple
+//#define USE_THERMISTOR
+#define AD595_THERMOCOUPLE
+//#define MAX6675_THERMOCOUPLE
+//Security measure in case the temp sensor is electrically disconnected:
+//#define PULL_UP_TEMPERATURE_INPUT A8
 
 // Set to 1 if enable pins are inverting
 // For RepRap stepper boards version 1.x the enable pins are *not* inverting.
@@ -62,32 +73,24 @@
 // Axis scaling in stepper-motor steps per mm of movement
 
 // Select 1/16 STEP!
-#define X_STEPS_PER_MM   12.322
-#define INVERT_X_DIR 0
+#define X_STEPS_PER_MM   79.87220447 //Ultimaker's belt pitch is 2.032mm. 2.032*20=40.064. 40.064/200/16 mm/step
+#define INVERT_X_DIR 1
 
 // Select 1/16 STEP!
-#define Y_STEPS_PER_MM   12.424
+#define Y_STEPS_PER_MM   79.87220447
 #define INVERT_Y_DIR 0
 
 // This stepper driver should be in EIGHT STEP MODE (LOW/HIGH/LOW)
-#define Z_STEPS_PER_MM   191.86
-#define INVERT_Z_DIR 0
-
-//Feed Piston:
-#define F_STEPS_PER_MM   91.134
-#define INVERT_F_DIR 1
-
-//Wiper stepper:
-#define W_STEPS_PER_MM   9.6189 
-#define INVERT_Z_DIR 0
+#define Z_STEPS_PER_MM   200*8/3///1.25//3
+#define INVERT_Z_DIR 1
 
 // Stepper-driven extruder
 // E_STEPS_PER_MM is the number of steps needed to 
 // extrude 1mm out of the nozzle.  E0 for extruder 0;
 // E1 for extruder 1, and so on.
 
-//#define E0_STEPS_PER_MM   14.0//17.6      // NEMA 17 59/11 geared extruder 8mm diameter drive
-//#define E1_STEPS_PER_MM   14.0//17.6      // NEMA 17 59/11 geared extruder 8mm diameter drive
+#define E0_STEPS_PER_MM   14.0//17.6      // NEMA 17 59/11 geared extruder 8mm diameter drive
+#define E1_STEPS_PER_MM   14.0//17.6      // NEMA 17 59/11 geared extruder 8mm diameter drive
 
 // The temperature routines get called each time the main loop
 // has gone round this many times
@@ -125,8 +128,8 @@
 #define SMALL_DISTANCE2 (SMALL_DISTANCE*SMALL_DISTANCE) // *RO
 
 //our maximum feedrates in mm/minute
-#define FAST_XY_FEEDRATE 2000.0
-#define FAST_Z_FEEDRATE  100
+#define FAST_XY_FEEDRATE 4000.0
+#define FAST_Z_FEEDRATE  75.0
 
 // Data for acceleration calculations
 // Comment out the next line to turn accelerations off
@@ -135,10 +138,8 @@
 // To enable acceleration by default, configure to true. It can be turned of with M-code M142
 //acceleration_enabled = true;
 
-#define SLOW_XY_FEEDRATE 175 // Speed from which to start accelerating
-#define SLOW_Z_FEEDRATE 40
-
-#define W_FEEDRATE 1200 //wiper feedrate
+#define SLOW_XY_FEEDRATE 1200.0 // Speed from which to start accelerating
+#define SLOW_Z_FEEDRATE 45
 
 
 #if INVERT_ENABLE_PINS == 1  // *RO
@@ -164,7 +165,7 @@
 // Too long and the melt will extend too far up the insulating tube.
 // Default value: 10
 
-//#define WAIT_AT_TEMPERATURE 10
+#define WAIT_AT_TEMPERATURE 10
 
 // PID gains.  E_ = extruder, B_ = bed.  The Es are about right for a brass extruder about 8 mm 
 // in diameter and 30 mm long heated by a 6 ohm coil with a 12v supply.  The B_ values are OK
@@ -172,18 +173,18 @@
 // Extruding increase biases the input to the extruder heater when the extruder
 // is running as it requires more power.
 
-//#define E_TEMP_PID_PGAIN 5.5// HIGHER: quicker 
-//#define E_TEMP_PID_IGAIN 0.50 // HIGHER: makes overshoot bigger, but also shorter if you LIMIT it, see below)
-//#define E_TEMP_PID_DGAIN 0.2 // Not doing much good
-//#define E_TEMP_PID_BAND 0.0
-//// To prevent integral windup, allow the I*GAIN to only have this much influence (below 255 makes sense):
-//#define E_TEMP_PID_I_LIMIT 60/E_TEMP_PID_IGAIN
-//#define EXTRUDING_INCREASE 7
-//
-//#define B_TEMP_PID_PGAIN 2
-//#define B_TEMP_PID_IGAIN 0.07
-//#define B_TEMP_PID_DGAIN 1
-//#define B_TEMP_PID_BAND 1000.0
+#define E_TEMP_PID_PGAIN 5.5// HIGHER: quicker 
+#define E_TEMP_PID_IGAIN 0.50 // HIGHER: makes overshoot bigger, but also shorter if you LIMIT it, see below)
+#define E_TEMP_PID_DGAIN 0.2 // Not doing much good
+#define E_TEMP_PID_BAND 0.0
+// To prevent integral windup, allow the I*GAIN to only have this much influence (below 255 makes sense):
+#define E_TEMP_PID_I_LIMIT 60/E_TEMP_PID_IGAIN
+#define EXTRUDING_INCREASE 7
+
+#define B_TEMP_PID_PGAIN 2
+#define B_TEMP_PID_IGAIN 0.07
+#define B_TEMP_PID_DGAIN 1
+#define B_TEMP_PID_BAND 1000.0
 
 // To turn on PID debugging strings, set this to EXTRUDER_0_HEATER_PIN, EXTRUDER_1_HEATER_PIN or BED_HEATER_PIN
 //#define DEBUG_PID EXTRUDER_0_HEATER_PIN
@@ -197,8 +198,6 @@
 #define X_STEPS_PER_INCH (X_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define Y_STEPS_PER_INCH (Y_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define Z_STEPS_PER_INCH (Z_STEPS_PER_MM*INCHES_TO_MM) // *RO
-#define F_STEPS_PER_INCH (F_STEPS_PER_MM*INCHES_TO_MM) // *RO
-#define W_STEPS_PER_INCH (W_STEPS_PER_MM*INCHES_TO_MM) // *RO
 
 
 //our command string length

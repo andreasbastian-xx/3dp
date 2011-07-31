@@ -39,12 +39,12 @@ void loop()
 
     for(int i = 0; i < 300; i++)
     {
-      STEP(10,0,zdp,zsp); 
+      STEP(-10,0,zdp,zsp); 
     }
-  for(int i = 0; i < 300; i++)
-  {
-    STEP(10,0,fdp,fsp); 
-  }
+//  for(int i = 0; i < 300; i++)
+//  {
+//    STEP(10,0,fdp,fsp); 
+//  }
 
 }
 

@@ -14,6 +14,7 @@ http://objects.reprap.org/wiki/Mendel_User_Manual:_RepRapGCodes
 
 #include "configuration.h"
 #include "pins.h"
+#include "extruder.h"
 #include "vectors.h"
 #include "cartesian_dda.h"
 #include <string.h>
@@ -373,7 +374,7 @@ void process_string(char instruction[], int size)
   	{
 		last_gcode_g = gc.G;	/* remember this for future instructions */
 		fp = where_i_am;
-		if (abs_mode)//absolute positioning
+		if (abs_mode)
 		{
 			if (gc.seen & GCODE_X)
 				fp.x = gc.X;
@@ -384,7 +385,7 @@ void process_string(char instruction[], int size)
 			if (gc.seen & GCODE_E)
 				fp.e = gc.E;
 		}
-		else//relative positioning
+		else
 		{
 			if (gc.seen & GCODE_X)
 				fp.x += gc.X;
@@ -413,37 +414,11 @@ void process_string(char instruction[], int size)
                                 fp.f = FAST_XY_FEEDRATE;
                                 qMove(fp);
                                 fp.f = fr;
-
                                 return;
                                 
                         // Controlled move; -ve coordinate means zero the axis
 			case 1:
 // ERIK: acceleration on?! if(accelleration_enabled) acceleration_on = true;
-                                //check to see if we need to fire phasors:
-                                if(e_prev == fp.e)
-                                {
-                                  digitalWrite(LASER_PIN, HIGH);//laser off
-                                }
-                                else
-                                {
-                                  digitalWrite(LASER_PIN, LOW);//laser on
-                                }
-
-                                
-                                //check to see if we need to run z-hardware
-                                if(z_prev != fp.z)
-                                {
-                                  //advance z:
-                                  //--lower print piston
-                                  //--advance feed piston
-                                  //--run wiper forward and back
-                                  doZ(fabs(z_prev-fp.z));
-                                }
-          
-                                 z_prev = fp.z;
-                                 e_prev = fp.e;
-                                 //make sure print speed is set to the right val:
-                                 fp.f = SLOW_XY_FEEDRATE;
                                  qMove(fp);
                                  return;                                  
                                 
@@ -553,58 +528,62 @@ void process_string(char instruction[], int size)
 
 // Now, with E codes, there is no longer any idea of turning the extruder on or off.
 // (But see valve on/off below.)
-/*
 
+/*
 			//turn extruder on, forward
 			case 101:
-//				ex[extruder_in_use]->setDirection(1);
-//				ex[extruder_in_use]->setSpeed(extruder_speed);
+				ex[extruder_in_use]->setDirection(1);
+				ex[extruder_in_use]->setSpeed(extruder_speed);
 				break;
 
 			//turn extruder on, reverse
 			case 102:
-//				ex[extruder_in_use]->setDirection(0);
-//				ex[extruder_in_use]->setSpeed(extruder_speed);
+				ex[extruder_in_use]->setDirection(0);
+				ex[extruder_in_use]->setSpeed(extruder_speed);
 				break;
 
 			//turn extruder off
 
-			//custom code for temperature control
 */
+			//custom code for temperature control
 			case 104:
-//                                if (gc.seen & GCODE_S)
-//				{
-//					ex[extruder_in_use]->setTemperature((int)gc.S);
-//				}
+				if (gc.seen & GCODE_S)
+				{
+					ex[extruder_in_use]->setTemperature((int)gc.S);
+				}
 				break;
 
 			//custom code for temperature reading
 			case 105:
-//                                talkToHost.setETemp(ex[extruder_in_use]->getTemperature());
-
+                                talkToHost.setETemp(ex[extruder_in_use]->getTemperature());
+#if MOTHERBOARD == 2
+                                talkToHost.setBTemp(ex[0]->getBedTemperature());
+#else
+                                talkToHost.setBTemp(heatedBed.getTemperature());
+#endif
 				break;
 
 			//turn fan on
 			case 106:
-//				if (gc.seen & GCODE_S)
-//				{
-//					ex[extruder_in_use]->setCooler((int)gc.S);
-//				} else 
-//				{
-//  					ex[extruder_in_use]->setCooler(255);
-//				}
+				if (gc.seen & GCODE_S)
+				{
+					ex[extruder_in_use]->setCooler((int)gc.S);
+				} else 
+				{
+  					ex[extruder_in_use]->setCooler(255);
+				}
 				break;
 
 			//turn fan off
 			case 107:
-//				ex[extruder_in_use]->setCooler(0);
+				ex[extruder_in_use]->setCooler(0);
 				break;
 
 
                         // Set the temperature and wait for it to get there
 			case 109:
-//				ex[extruder_in_use]->setTemperature((int)gc.S);
-//                                ex[extruder_in_use]->waitForTemperature();
+				ex[extruder_in_use]->setTemperature((int)gc.S);
+                                ex[extruder_in_use]->waitForTemperature();
 				break;
                         // Starting a new print, reset the gc.LastLineNrRecieved counter
 			case 110:
@@ -621,12 +600,12 @@ void process_string(char instruction[], int size)
 // If there's an S field, use that to set the PWM, otherwise use the pot.
                        case 108: // Depricated
                        case 113:
-//                                #if MOTHERBOARD == 2
-//                                 if (gc.seen & GCODE_S)
-//                                     ex[extruder_in_use]->setPWM((int)(255.0*gc.S + 0.5));
-//                                  else
-//                                     ex[extruder_in_use]->usePotForMotor();
-//                                #endif
+                                #if MOTHERBOARD == 2
+                                 if (gc.seen & GCODE_S)
+                                     ex[extruder_in_use]->setPWM((int)(255.0*gc.S + 0.5));
+                                  else
+                                     ex[extruder_in_use]->usePotForMotor();
+                                #endif
 				break;
 
 			//custom code for returning current coordinates
@@ -637,7 +616,7 @@ void process_string(char instruction[], int size)
 
                         // TODO: make this work properly
                         case 116:
-//                             ex[extruder_in_use]->waitForTemperature();
+                             ex[extruder_in_use]->waitForTemperature();
 				break;   
 
 // The valve (real, or virtual...) is now the way to control any extruder (such as
@@ -645,18 +624,22 @@ void process_string(char instruction[], int size)
 
                         // Open the valve
                         case 126:
-//                                ex[extruder_in_use]->valveSet(true, (int)(gc.P + 0.5));
+                                ex[extruder_in_use]->valveSet(true, (int)(gc.P + 0.5));
                                 break;
                                 
                         // Close the valve
                         case 127:
-//                                ex[extruder_in_use]->valveSet(false, (int)(gc.P + 0.5));
+                                ex[extruder_in_use]->valveSet(false, (int)(gc.P + 0.5));
                                 break;
                                                                 
                         case 140:
 				if (gc.seen & GCODE_S)
 				{
-			
+#if MOTHERBOARD == 2
+					ex[0]->setBedTemperature((int)gc.S);
+#else
+					heatedBed.setTemperature((int)gc.S);
+#endif				
                                 }
 				break;
 
@@ -678,12 +661,12 @@ void process_string(char instruction[], int size)
 
 // Tool (i.e. extruder) change?
                 
-//        if (gc.seen & GCODE_T)
-//        {
-//            while(!qEmpty()) delay(WAITING_DELAY);
-//            //delay(2*WAITING_DELAY);
-//            newExtruder(gc.T);
-//        }
+        if (gc.seen & GCODE_T)
+        {
+            while(!qEmpty()) delay(WAITING_DELAY);
+            //delay(2*WAITING_DELAY);
+            newExtruder(gc.T);
+        }
 }
 
 int scan_float(char *str, float *valp, unsigned int *seen, unsigned int flag)

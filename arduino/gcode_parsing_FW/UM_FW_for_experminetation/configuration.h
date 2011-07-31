@@ -135,7 +135,7 @@
 // To enable acceleration by default, configure to true. It can be turned of with M-code M142
 //acceleration_enabled = true;
 
-#define SLOW_XY_FEEDRATE 175 // Speed from which to start accelerating
+#define SLOW_XY_FEEDRATE 76.2 // Speed from which to start accelerating
 #define SLOW_Z_FEEDRATE 40
 
 #define W_FEEDRATE 1200 //wiper feedrate

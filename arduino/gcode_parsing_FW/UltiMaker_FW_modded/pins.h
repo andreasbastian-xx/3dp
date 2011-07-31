@@ -31,7 +31,7 @@
 // SELECT THE VERSION OF THE MOTHERBOARD THAT YOU HAVE.
 #if ULTIMAKER_BOARD_MINOR_VERSION == 5
 
-#define DEBUG_PIN        4
+#define DEBUG_PIN        50
 
 #define X_STEP_PIN (byte)2
 #define X_DIR_PIN (byte)3
@@ -47,21 +47,21 @@
 
 #define Z_STEP_PIN (byte)22 
 #define Z_DIR_PIN (byte)23
-#define Z_MIN_PIN (byte)25
-#define Z_MAX_PIN (byte)26
-#define Z_ENABLE_PIN (byte)27
+#define Z_MIN_PIN (byte)24
+#define Z_MAX_PIN (byte)25
+#define Z_ENABLE_PIN (byte)26
 
-#define F_STEP_PIN (byte)28 
-#define F_DIR_PIN (byte)29
-#define F_MIN_PIN (byte)30
-#define F_MAX_PIN (byte)31
-#define F_ENABLE_PIN (byte)32
+#define F_STEP_PIN (byte)27 
+#define F_DIR_PIN (byte)28
+#define F_MIN_PIN (byte)29
+#define F_MAX_PIN (byte)30
+#define F_ENABLE_PIN (byte)31
 
-#define W_STEP_PIN (byte)33 
-#define W_DIR_PIN (byte)34
-#define W_MIN_PIN (byte)35
-#define W_MAX_PIN (byte)36
-#define W_ENABLE_PIN (byte)37
+#define W_STEP_PIN (byte)32
+#define W_DIR_PIN (byte)33
+#define W_MIN_PIN (byte)34
+#define W_MAX_PIN (byte)35
+#define W_ENABLE_PIN (byte)36
 
 
 

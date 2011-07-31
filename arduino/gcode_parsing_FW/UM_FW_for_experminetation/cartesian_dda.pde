@@ -38,18 +38,10 @@ cartesian_dda::cartesian_dda()
 	pinMode(Z_STEP_PIN, OUTPUT);
 	pinMode(Z_DIR_PIN, OUTPUT);
 
-	pinMode(F_STEP_PIN, OUTPUT);
-	pinMode(F_DIR_PIN, OUTPUT);
-
-	pinMode(W_STEP_PIN, OUTPUT);
-	pinMode(W_DIR_PIN, OUTPUT);
-
 #if MOTHERBOARD > 0
 	pinMode(X_ENABLE_PIN, OUTPUT);
 	pinMode(Y_ENABLE_PIN, OUTPUT);
 	pinMode(Z_ENABLE_PIN, OUTPUT);
-        pinMode(F_ENABLE_PIN, OUTPUT);
-        pinMode(W_ENABLE_PIN, OUTPUT);
 #endif
 
 //turn the motors off at the start.
@@ -60,16 +52,12 @@ cartesian_dda::cartesian_dda()
 	pinMode(X_MIN_PIN, INPUT);
 	pinMode(Y_MIN_PIN, INPUT);
 	pinMode(Z_MIN_PIN, INPUT);
-        pinMode(F_MIN_PIN, INPUT);
-        pinMode(W_MIN_PIN, INPUT);
 // This puts al logical high in the input pins that can be grounded (made LOW) by a switch.
 // The AtMega chips have internal 20K resistor to Vcc (HIGH) or (GND) LOW
 #if ENDSTOP_PULL_UPS == true
 	digitalWrite(X_MIN_PIN, HIGH);
 	digitalWrite(Y_MIN_PIN, HIGH); 
 	digitalWrite(Z_MIN_PIN, HIGH);
-	digitalWrite(F_MIN_PIN, HIGH); 
-	digitalWrite(W_MIN_PIN, HIGH);
 #endif
 #endif
 
@@ -77,16 +65,12 @@ cartesian_dda::cartesian_dda()
 	pinMode(X_MAX_PIN, INPUT);
 	pinMode(Y_MAX_PIN, INPUT);
 	pinMode(Z_MAX_PIN, INPUT);
-        pinMode(F_MAX_PIN, INPUT);
-        pinMode(W_MAX_PIN, INPUT);
 #if ENDSTOP_PULL_UPS == true
 	// This puts al logical high in the input pins that can be grounded (made LOW) by a switch.
 	// The AtMega chips have internal 20K resistor to Vcc (HIGH) or (GND) LOW
 	digitalWrite(X_MAX_PIN, HIGH);
 	digitalWrite(Y_MAX_PIN, HIGH); 
 	digitalWrite(Z_MAX_PIN, HIGH);
-	digitalWrite(F_MAX_PIN, HIGH); 
-	digitalWrite(W_MAX_PIN, HIGH);
 #endif
 #endif
 	
@@ -111,8 +95,7 @@ void cartesian_dda::set_units()
       units.x = X_STEPS_PER_MM;
       units.y = Y_STEPS_PER_MM;
       units.z = Z_STEPS_PER_MM;
-//      units.e = ex[extruder_in_use]->stepsPerMM();
-      units.e = 0;//calibration_tag
+//      units.e = //ex[extruder_in_use]->stepsPerMM();
       units.f = 1.0;
     } else
     {
@@ -120,7 +103,6 @@ void cartesian_dda::set_units()
       units.y = Y_STEPS_PER_INCH;
       units.z = Z_STEPS_PER_INCH;
 //      units.e = ex[extruder_in_use]->stepsPerMM()*INCHES_TO_MM;
-      units.e = 0;//calibration_tag
       units.f = 1.0;  
     }
 }
@@ -199,15 +181,12 @@ void cartesian_dda::set_target(const FloatPoint& p)
         	
 	//what is our direction?
         
-        
-        
 	x_direction = (target_position.x >= where_i_am.x);
 	y_direction = (target_position.y >= where_i_am.y);
 	z_direction = (target_position.z >= where_i_am.z);
         e_direction = (target_position.e >= where_i_am.e);
 	f_direction = (target_position.f >= where_i_am.f);
-        //as of right here, x_direction is not behaving, but y_direction is fine.  
-        sprintf(talkToHost.string(), "t_p.x,y, w_i_a.x,u:  %d, %d, %d, %d, dirs: %d %d, time=%d", (int)target_position.x, (int)target_position.y, (int)where_i_am.x, (int)where_i_am.y, (int)x_direction, (int)y_direction, millis());
+//        sprintf(talkToHost.string(), "t_p.x,y, w_i_a.x,u:  %d, %d, %d, %d, dirs: %d %d, time=%d", (int)target_position.x, (int)target_position.y, (int)where_i_am.x, (int)where_i_am.y, (int)x_direction, (int)y_direction, millis());
 
 	dda_counter.x = -total_steps/2;
 	dda_counter.y = dda_counter.x;
@@ -237,7 +216,7 @@ void cartesian_dda::dda_step()
                 f_can_step = fCanStep(current_steps.f, target_steps.f, f_direction);
                 
                 real_move = false;
-                //I suspect the direction error may be lurking in this if statement
+                
 		if (x_can_step)
 		{
 			dda_counter.x += delta_steps.x;
@@ -319,8 +298,7 @@ void cartesian_dda::dda_step()
 				else
 					current_steps.f--;
                                 feed_change = true;
-			} 
-                        else
+			} else
                                 feed_change = false;
 		}
 
@@ -397,7 +375,7 @@ void cartesian_dda::dda_start()
   digitalWrite(Z_DIR_PIN, d);
 
 
-  //ex[extruder_in_use]->setDirection(e_direction);
+//  ex[extruder_in_use]->setDirection(e_direction);
   
 //turn on steppers to start moving =)
     
@@ -420,8 +398,8 @@ void cartesian_dda::enable_steppers()
     digitalWrite(Y_ENABLE_PIN, ENABLE_ON);
   if(delta_steps.z)
     digitalWrite(Z_ENABLE_PIN, ENABLE_ON);
-  //if(delta_steps.e)
-    //ex[extruder_in_use]->enableStep();
+//  if(delta_steps.e)
+//    ex[extruder_in_use]->enableStep();
 #endif  
 }
 
@@ -441,7 +419,7 @@ void cartesian_dda::disable_steppers()
         digitalWrite(Z_ENABLE_PIN, !ENABLE_ON);
 #endif
 
-        //ex[extruder_in_use]->disableStep();
+//        ex[extruder_in_use]->disableStep();
         
 #endif
 }
@@ -452,3 +430,4 @@ void cartesian_dda::shutdown()
   nullmove = false;
   disable_steppers();
 }
+

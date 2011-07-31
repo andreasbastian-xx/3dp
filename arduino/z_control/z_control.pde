@@ -42,12 +42,14 @@ void setup()
 
 void loop() 
 {  
+  //pos stepspeed to retract feed piston
+  //neg step speed to advance print piston
 
   for(int i = 0; i < 500; i++)
   {
     STEP(-10,0,fdp,fsp); 
   }
-  delay(15000);
+  //delay(15000);
 //  for(int i = 0; i < 1000; i++)
 //  {
 //    STEP(-20,0,zdp,zsp); 
