@@ -33,8 +33,6 @@
 // Arduino Mega v1.7 by Adrian Bowyer
 
 
-#define LASER_PIN 50
-
 float e_prev = 0;
 float z_prev = 0;
 
@@ -94,13 +92,17 @@ ISR(TIMER1_COMPA_vect)
   nonest = false;
 }
 
+
 void setup()
 {
   pinMode(13, OUTPUT);
+  pinMode(W_ENABLE_PIN, OUTPUT);
   pinMode(LASER_PIN, OUTPUT);
   pinMode(Z_STEP_PIN, OUTPUT);
   pinMode(F_STEP_PIN, OUTPUT);  
   pinMode(W_STEP_PIN, OUTPUT);
+
+  pinMode(W_DIR_PIN, OUTPUT);
 
   nonest = false;
   disableTimerInterrupt();
@@ -426,5 +428,6 @@ void delayMicrosecondsInterruptible(unsigned int us)
   "0" (us) // 2 cycles
     );
 }
+
 
 

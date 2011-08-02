@@ -4,10 +4,12 @@
 
 void doZ(float layerThickness)
 {
+  //enable motors here
+  digitalWrite(W_ENABLE_PIN, HIGH);
+  //    digitalWrite(F_ENABLE_PIN, LOW);
+  //      digitalWrite(Z_ENABLE_PIN, LOW);
+  delay(2);//wait for driver to wake up
 
-
-  //for debuggin purposes, layerThickness is hardcoded:
-  //  layerThickness = 0.01;
   //  digitalWrite(Z_ENABLE_PIN, HIGH);
   //  digitalWrite(F_ENABLE_PIN, HIGH);
   //  digitalWrite(W_ENABLE_PIN, HIGH);
@@ -33,7 +35,7 @@ void doZ(float layerThickness)
 
   //move feed piston:
   steps = F_STEPS_PER_MM*layerThickness*1.1;//scale up by 10% to account for powder loses
-
+  
   for(int i = 0; i < steps; i++)
   {
     takeStep(F_STEP_PIN);
@@ -44,14 +46,14 @@ void doZ(float layerThickness)
   }
 
   //finally, distribute the powder with the wiper:
-  steps = 7.5*25.4*W_STEPS_PER_MM;
-  feedDelay = (7.5*25.4*60000000.0) / (W_FEEDRATE*steps);
+  steps = 11*25.4*W_STEPS_PER_MM;
+  feedDelay = (11*25.4*60000000.0) / (W_FEEDRATE*steps);
   if (feedDelay >= 16383)
     milDel = feedDelay / 1000;
   else
     milDel = 0;
   digitalWrite(W_DIR_PIN,HIGH);
-  for(int i = 0; i < 300; i++)
+  for(int i = 0; i < 500; i++)
   {
     takeStep(W_STEP_PIN);
     if (milDel > 0)
@@ -59,9 +61,11 @@ void doZ(float layerThickness)
     else
       delayMicroseconds(feedDelay);
   }
+
+
 
   digitalWrite(W_DIR_PIN,LOW);
-  for(int i = 0; i < 300; i++)
+  for(int i = 0; i < 500; i++)
   {
     takeStep(W_STEP_PIN);
     if (milDel > 0)
@@ -70,6 +74,12 @@ void doZ(float layerThickness)
       delayMicroseconds(feedDelay);
   }
 
+
+
+  //disable motors here
+  digitalWrite(W_ENABLE_PIN, LOW);
+  //    digitalWrite(F_ENABLE_PIN, LOW);
+  //      digitalWrite(Z_ENABLE_PIN, LOW);
 
 }
 

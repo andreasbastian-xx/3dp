@@ -206,8 +206,6 @@ void cartesian_dda::set_target(const FloatPoint& p)
 	z_direction = (target_position.z >= where_i_am.z);
         e_direction = (target_position.e >= where_i_am.e);
 	f_direction = (target_position.f >= where_i_am.f);
-        //as of right here, x_direction is not behaving, but y_direction is fine.  
-        sprintf(talkToHost.string(), "t_p.x,y, w_i_a.x,u:  %d, %d, %d, %d, dirs: %d %d, time=%d", (int)target_position.x, (int)target_position.y, (int)where_i_am.x, (int)where_i_am.y, (int)x_direction, (int)y_direction, millis());
 
 	dda_counter.x = -total_steps/2;
 	dda_counter.y = dda_counter.x;

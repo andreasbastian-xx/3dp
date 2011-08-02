@@ -63,6 +63,8 @@
 #define W_MAX_PIN (byte)35
 #define W_ENABLE_PIN (byte)36
 
+#define LASER_PIN (byte)12
+
 
 
 #endif //ULTIMAKER_BOARD=="1.5.3"

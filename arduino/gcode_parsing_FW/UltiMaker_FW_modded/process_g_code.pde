@@ -423,12 +423,14 @@ void process_string(char instruction[], int size)
                                 if(e_prev == fp.e)
                                 {
                                   digitalWrite(LASER_PIN, HIGH);//laser off
+
                                 }
                                 else
                                 {
                                   digitalWrite(LASER_PIN, LOW);//laser on
                                 }
-
+                                  sprintf(talkToHost.string(), "fp.e = %d, e_prev = %d", int(fp.e), int(e_prev));
+//                                  sprintf(talkToHost.string(), "fp.e = %d, ", fp.e);
                                 
                                 //check to see if we need to run z-hardware
                                 if(z_prev != fp.z)
@@ -443,7 +445,7 @@ void process_string(char instruction[], int size)
                                  z_prev = fp.z;
                                  e_prev = fp.e;
                                  //make sure print speed is set to the right val:
-                                 fp.f = SLOW_XY_FEEDRATE;
+                                 //fp.f = SLOW_XY_FEEDRATE;
                                  qMove(fp);
                                  return;                                  
                                 

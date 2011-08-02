@@ -4,26 +4,26 @@ G21 (Metric: The unit is a millimeter)
 M18 (Disable motors for now, to allow manual moving of the head)
 G90 (Absolute Positioning)
 G92 X0 Y0 Z0 E0 (set origin to current position)
-G90 
-G1 Z0.4
-G92 E0 (zero the extruded length)
-G21 (end of start .gcode file)
-G90
-G21
+;G90 
+;G1 Z0.4
+;G92 E0 (zero the extruded length)
+;G21 (end of start .gcode file)
+;G90
+;G21
 ;M103
-M105
-M106
-M113 S1.0
+;M105
+;M106
+;M113 S1.0
 ;M108 S50.04
-M104 S245.0
+;M104 S245.0
 ;M108 S37.53
 ;M108 S39.41
-G1 X-8.79 Y-10.64 Z0.3 F1620.0
+;G1 X-8.79 Y-10.64 Z0.3 F1620.0
 ;M101
-G1 X-8.79 Y45.6 Z0.3 F1620.0 E82.09
-G1 X47.59 Y45.6 Z0.3 F1620.0 E164.383
-G1 X47.59 Y-10.64 Z0.3 F1620.0 E246.473
-G1 X-8.79 Y-10.64 Z0.3 F1620.0 E328.767
+;G1 X-8.79 Y45.6 Z0.3 F1620.0 E82.09
+;G1 X47.59 Y45.6 Z0.3 F1620.0 E164.383
+;G1 X47.59 Y-10.64 Z0.3 F1620.0 E246.473
+;G1 X-8.79 Y-10.64 Z0.3 F1620.0 E328.767
 ;M103
 G1 X0.8 Y0.51 Z0.3 F3600.0
 ;M101
