@@ -42,21 +42,21 @@ void setup()
 
 void loop() 
 {  
-  int switcher = 3;
+  int switcher = 1;
   switch(switcher)
   {
   case 1:
     //print piston (neg is move up, pos is move down)
     for(int i = 0; i < 300; i++)
     {
-      STEP(-10,0,zdp,zsp); 
+      STEP(10,0,zdp,zsp); 
     }
     break;
   case 2:
     //feed piston, - is up, + is down
     for(int i = 0; i < 300; i++)
     {
-      STEP(10,0,fdp,fsp); 
+      STEP(-10,0,fdp,fsp); 
     }
     break;
   case 3:

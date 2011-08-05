@@ -56,6 +56,7 @@
 #define X_ENDSTOP_INVERTING true
 #define Y_ENDSTOP_INVERTING true
 #define Z_ENDSTOP_INVERTING true
+#define THRESH 60 //logic threshold for analogRead(LIM_PIN)
 
 // Motherboard 3 driving Pololu microstepping controllers - 16 microsteps
 

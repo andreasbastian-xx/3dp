@@ -6,8 +6,8 @@ void doZ(float layerThickness)
 {
   //enable motors here
   digitalWrite(W_ENABLE_PIN, HIGH);
-  //    digitalWrite(F_ENABLE_PIN, LOW);
-  //      digitalWrite(Z_ENABLE_PIN, LOW);
+  digitalWrite(F_ENABLE_PIN, HIGH);
+  digitalWrite(Z_ENABLE_PIN, HIGH);
   delay(2);//wait for driver to wake up
 
   //  digitalWrite(Z_ENABLE_PIN, HIGH);
@@ -78,8 +78,8 @@ void doZ(float layerThickness)
 
   //disable motors here
   digitalWrite(W_ENABLE_PIN, LOW);
-  //    digitalWrite(F_ENABLE_PIN, LOW);
-  //      digitalWrite(Z_ENABLE_PIN, LOW);
+  digitalWrite(F_ENABLE_PIN, LOW);
+  digitalWrite(Z_ENABLE_PIN, LOW);
 
 }
 
