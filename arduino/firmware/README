@@ -1,0 +1,5 @@
+in_use/ contains the successfully modified Ultimaker Arduino firmware.
+
+old_code/ contains abandoned and dissected firmware files that I used to probe and explore the firmware.  
+
+Andreas Bastian 2012
